@@ -5,6 +5,7 @@ import calc
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
 PORT = 1024  # Port to listen on (non-privileged ports are > 1023)
 
+
 def handle_client(conn, addr):
     print(f"Connected by {addr}")
 
@@ -21,18 +22,20 @@ def handle_client(conn, addr):
             operation = parts[0]
             operands = [int(operand) for operand in parts[1:]]
 
-            if operation == "add":
-                result = calc.add(*operands)
-            elif operation == "sub":
-                result = calc.sub(*operands)
-            elif operation == "mul":
-                result = calc.mul(*operands)
-            elif operation == "div":
-                result = calc.div(*operands)
+            operations = {
+                "add": calc.add,
+                "sub": calc.sub,
+                "mul": calc.mul,
+                "div": calc.div,
+            }
 
-            response = str(result).encode("utf-8")
-            print(f"Sending {result!r}")
-            conn.sendall(response)
+            if operation in operations:
+                result = operations[operation](*operands)
+                response = str(result).encode("utf-8")
+                print(f"Sending {result!r}")
+                conn.sendall(response)
+            else:
+                conn.sendall("Invalid operation".encode("utf-8"))
 
         except (ValueError, IndexError, ZeroDivisionError):
             conn.sendall("Invalid input".encode("utf-8"))
