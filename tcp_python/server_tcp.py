@@ -1,9 +1,10 @@
 import socket
 import threading
 import calc
+import temp_converter
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
-PORT = 1024  # Port to listen on (non-privileged ports are > 1023)
+PORT = 1025  # Port to listen on (non-privileged ports are > 1023)
 
 
 def handle_client(conn, addr):
@@ -29,7 +30,22 @@ def handle_client(conn, addr):
                 "div": calc.div,
             }
 
-            if operation in operations:
+            temperatures = {
+                "c2k": temp_converter.celsius2kelvin,
+                "k2c": temp_converter.kelvin2celsius,
+                "k2f": temp_converter.kelvin2fahrenheit,
+                "f2k": temp_converter.fahrenheit2kelvin,
+                "c2f": temp_converter.celcius2fahrenheit,
+                "f2c": temp_converter.fahrenheit2celcius,
+            }
+
+            if operation in temperatures:
+                result = temperatures[operation](*operands)
+                response = str(result).encode("utf-8")
+                print(f"Sending {result!r}")
+                conn.sendall(response)
+
+            elif operation in operations:
                 result = operations[operation](*operands)
                 response = str(result).encode("utf-8")
                 print(f"Sending {result!r}")
