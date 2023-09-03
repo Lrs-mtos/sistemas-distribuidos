@@ -4,8 +4,31 @@ import calc
 import temp_converter
 
 HOST = "127.0.0.1"  # Standard loopback interface address (localhost)
-PORT = 1025  # Port to listen on (non-privileged ports are > 1023)
+PORT = 1024  # Port to listen on (non-privileged ports are > 1023)
 
+operations = {
+    "add": calc.add,
+    "sub": calc.sub,
+    "mul": calc.mul,
+    "div": calc.div,
+}
+
+temperatures = {
+    "c2k": temp_converter.celsius2kelvin,
+    "k2c": temp_converter.kelvin2celsius,
+    "k2f": temp_converter.kelvin2fahrenheit,
+    "f2k": temp_converter.fahrenheit2kelvin,
+    "c2f": temp_converter.celcius2fahrenheit,
+    "f2c": temp_converter.fahrenheit2celcius,
+}
+
+def perform_operation(operation, operands, functions):
+                if operation in functions:
+                    result = functions[operation](*operands)
+                    return str(result).encode("utf-8")
+                else:
+                    return None
+                
 
 def handle_client(conn, addr):
     print(f"Connected by {addr}")
@@ -23,38 +46,15 @@ def handle_client(conn, addr):
             operation = parts[0]
             operands = [int(operand) for operand in parts[1:]]
 
-            operations = {
-                "add": calc.add,
-                "sub": calc.sub,
-                "mul": calc.mul,
-                "div": calc.div,
-            }
-
-            temperatures = {
-                "c2k": temp_converter.celsius2kelvin,
-                "k2c": temp_converter.kelvin2celsius,
-                "k2f": temp_converter.kelvin2fahrenheit,
-                "f2k": temp_converter.fahrenheit2kelvin,
-                "c2f": temp_converter.celcius2fahrenheit,
-                "f2c": temp_converter.fahrenheit2celcius,
-            }
-
-            if operation in temperatures:
-                result = temperatures[operation](*operands)
-                response = str(result).encode("utf-8")
-                print(f"Sending {result!r}")
+            response = perform_operation(operation, operands, operations) or perform_operation(operation, operands, temperatures)
+            if response is None:
+                raise ValueError("Operation not supported by this server".encode("utf-8"))
+            else: 
+                print(f"Sending {response.decode('utf-8')!r}")
                 conn.sendall(response)
-
-            elif operation in operations:
-                result = operations[operation](*operands)
-                response = str(result).encode("utf-8")
-                print(f"Sending {result!r}")
-                conn.sendall(response)
-            else:
-                conn.sendall("Invalid operation".encode("utf-8"))
 
         except (ValueError, IndexError, ZeroDivisionError):
-            conn.sendall("Invalid input".encode("utf-8"))
+            conn.sendall("Invalid Operation.".encode("utf-8")) #CORRIGIR CASO ONDE O USUÁRIO DIGITA UMA OPERAÇÃO INVÁLIDA (linha 51)
 
     print(f"Connection closed for {addr}.")
     conn.close()
