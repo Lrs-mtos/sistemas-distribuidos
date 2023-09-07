@@ -48,13 +48,13 @@ def handle_client(conn, addr):
 
             response = perform_operation(operation, operands, operations) or perform_operation(operation, operands, temperatures)
             if response is None:
-                raise ValueError("Operation not supported by this server".encode("utf-8"))
+                raise ValueError()
             else: 
                 print(f"Sending {response.decode('utf-8')!r}")
                 conn.sendall(response)
 
         except (ValueError, IndexError, ZeroDivisionError):
-            conn.sendall("Invalid Operation.".encode("utf-8")) #CORRIGIR CASO ONDE O USUÁRIO DIGITA UMA OPERAÇÃO INVÁLIDA (linha 51)
+            conn.sendall("Operation not supported by this server. \nType '--h' or 'help' to see the available commands\n".encode("utf-8"))
 
     print(f"Connection closed for {addr}.")
     conn.close()
