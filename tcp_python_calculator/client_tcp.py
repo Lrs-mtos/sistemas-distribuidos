@@ -17,4 +17,5 @@ with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
         s.sendall(operation.encode("utf-8"))
         result = s.recv(1024)
         print(f"Result: {result.decode('utf-8')}")
+        continue
     
