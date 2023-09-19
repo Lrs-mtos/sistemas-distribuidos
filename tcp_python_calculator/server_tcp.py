@@ -23,11 +23,11 @@ temperatures = {
 }
 
 def perform_operation(operation, operands, functions):
-                if operation in functions:
-                    result = functions[operation](*operands)
-                    return str(result).encode("utf-8")
-                else:
-                    return None
+    if operation in functions:
+        result = functions[operation](*operands)
+        return str(result).encode("utf-8")
+    else:
+        return None
                 
 
 def handle_client(conn, addr):
