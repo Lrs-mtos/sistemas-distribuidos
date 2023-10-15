@@ -6,7 +6,7 @@ clientSocket = socket(AF_INET, SOCK_STREAM)
 clientSocket.connect((serverName, serverPort))
 
 while True:
-    sentence = input('Input lowercase sentence:')
+    sentence = input('Input:')
 
     if sentence == 'exit':
         break
