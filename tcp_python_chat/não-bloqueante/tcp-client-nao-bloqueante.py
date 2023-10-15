@@ -1,16 +1,19 @@
 from socket import *
+
 serverName = 'localhost'
-serverPort = 12001
-
+serverPort = 12000
 clientSocket = socket(AF_INET, SOCK_STREAM)
-clientSocket.connect((serverName,serverPort))
-print('Connected to server')
-while True:
+clientSocket.connect((serverName, serverPort))
 
-    sentence = input()
+while True:
+    sentence = input('Input lowercase sentence:')
+
+    if sentence == 'exit':
+        break
 
     clientSocket.send(sentence.encode('utf-8'))
-    text = clientSocket.recv(1024).decode('utf-8')
-    print("                         <<< From Server:", text)
+    modifiedSentence = clientSocket.recv(1024)
+    text = modifiedSentence.decode('utf-8')
+    print("From Server:", text)
 
 clientSocket.close()

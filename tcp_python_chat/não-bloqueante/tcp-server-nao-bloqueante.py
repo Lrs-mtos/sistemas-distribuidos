@@ -1,44 +1,25 @@
+import time
 from socket import *
 import threading
 
-def receive_message(sock):
-    while True:
-        message = sock.recv(1024)
-        if not message:
-               break
-        print("From Client:", message.decode('utf-8'))
-
-
-def handle_client(conn, addr):
-    print(f"Connected by {addr}")
-
-    while True:
-        data = conn.recv(1024)
-        if not data:
+def handle_client(clientSocket):
+    while 1:
+        sentence = clientSocket.recv(1024)
+        text = sentence.decode('utf-8')
+        print("From Client:", text)
+        if text == 'exit':
             break
+        capitalizedSentence = text.upper()
+        clientSocket.send(capitalizedSentence.encode('utf-8'))
+    clientSocket.close()
 
-        data = data.decode("utf-8")
-        print(f"Received {data!r}")
-
-    print(f"Connection closed for {addr}.")
-    conn.close()
-
-serverPort = 12001
+serverPort = 12000
 serverSocket = socket(AF_INET,SOCK_STREAM)
-serverSocket.bind(('',serverPort))
+serverSocket.bind(('', serverPort))
 serverSocket.listen(1)
-print("##################################")
-print("# The server is ready to receive #")
-print("##################################")
-
+print("The server is ready to receive")
 connectionSocket, addr = serverSocket.accept()
 
-#Thread para receber mensagens do cliente
-receive_thread = threading.Thread(target=receive_message, args=(connectionSocket,))
-receive_thread.start()
-
-while 1:
-     sentence = input('                      <<< ')
-     connectionSocket.send(sentence.encode('utf-8'))
-
-connectionSocket.close()
+# Crie uma nova thread para lidar com o cliente
+client_handler = threading.Thread(target=handle_client, args=(connectionSocket,))
+client_handler.start()
