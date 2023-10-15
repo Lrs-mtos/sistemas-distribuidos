@@ -1,16 +1,16 @@
 from socket import *
 serverName = 'localhost'
-serverPort = 12000
+serverPort = 12001
 
 clientSocket = socket(AF_INET, SOCK_STREAM)
 clientSocket.connect((serverName,serverPort))
+print('Connected to server')
 while True:
 
-    sentence = input('Input sentence: ')
+    sentence = input()
 
     clientSocket.send(sentence.encode('utf-8'))
-    modifiedSentence = clientSocket.recv(1024)
-    text = modifiedSentence.decode('utf-8')
-    print("From Server:", text)
+    text = clientSocket.recv(1024).decode('utf-8')
+    print("                         <<< From Server:", text)
 
 clientSocket.close()
