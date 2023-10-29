@@ -1,0 +1,127 @@
+Integrantes: Larissa da Silva Matos e Paula Araujo Feitosa
+
+Serviço Remoto "Tamagotchi":
+
+*****Método Remoto 1 - Play:
+
+(in) Argumentos de entrada:
+ - int energy - Nível de energia do animal de estimação.
+ - int hungry - Nível de fome do animal de estimação.
+ - int clean - Nível de limpeza do animal de estimação.
+(out) Argumento de saída:
+ - string result - Resultado da ação "play" (pode ser uma mensagem de sucesso ou falha).
+Exceções:
+ - PetNotAliveException - Essa exceção pode ser lançada quando o pet não está vivo, o que significa que ele já morreu anteriormente.
+ 
+ 
+*****Método Remoto 2 - Eat:
+
+(in) Argumentos de entrada:
+ - Comida (Comida): Uma estrutura de dados representando o tipo e quantidade de comida a ser dada ao pet.
+ - int energy - Nível de energia do animal de estimação.
+ - int hungry - Nível de fome do animal de estimação.
+ - int clean - Nível de limpeza do animal de estimação.
+(out) Argumento de saída:
+ - string result - Resultado da ação "eat" (pode ser uma mensagem de sucesso ou falha).
+Exceções:
+ - PetNotAliveException
+ 
+*****Método Remoto 3 - Shower:
+
+(in) Argumentos de entrada:
+ - Comida (Comida): Uma estrutura de dados representando o tipo e quantidade de comida a ser dada ao pet.
+ - int energy - Nível de energia do animal de estimação.
+ - int hungry - Nível de fome do animal de estimação.
+ - int clean - Nível de limpeza do animal de estimação.
+(out) Argumento de saída:
+ - string result - Resultado da ação "shower" (pode ser uma mensagem de sucesso ou falha).
+Exceções:
+ - PetNotAliveException
+
+*****Método Remoto 4 - Sleep:
+
+(in) Argumentos de entrada:
+ - int energy - Nível de energia do animal de estimação.
+ - int hungry - Nível de fome do animal de estimação.
+ - int clean - Nível de limpeza do animal de estimação.
+(out) Argumento de saída:
+ - string result - Resultado da ação "sleep" (pode ser uma mensagem de sucesso ou falha).
+Exceções:
+ - PetNotSleepyException
+
+
+
+
+
+
+Integrantes: Larissa da Silva Matos e Paula Araujo Feitosa
+
+Serviço Remoto: Tamagotchi
+
+Método Remoto 1 - Inicializar Pet:
+
+(in) Argumentos de entrada:
+Nome (string): O nome do novo pet.
+Energia (int): O nível de energia inicial do pet.
+Fome (int): O nível de fome inicial do pet.
+Limpeza (int): O nível de limpeza inicial do pet.
+
+(out) Argumento de saída:
+Nenhum.
+
+Exceções:
+PetInitializationException: Pode ser lançada se ocorrerem problemas durante a inicialização do pet, como valores inválidos para energia, fome ou limpeza.
+
+
+Método Remoto 2 - Brincar:
+
+(in) Argumentos de entrada:
+BrincarInput (struct BrincarInput): Estrutura de dados com a duração da brincadeira em minutos.
+
+(out) Argumento de saída:
+BrincarOutput (struct BrincarOutput): Estrutura de dados com o número de diamantes coletados durante a brincadeira.
+
+Exceções:
+PetNotAliveException: Pode ser lançada se o pet não estiver vivo.
+PetLowEnergyException: Pode ser lançada se o pet não tiver energia suficiente para brincar.
+
+
+Método Remoto 3 - Alimentar:
+
+(in) Argumentos de entrada:
+Comida (Comida): Uma estrutura de dados representando o tipo e quantidade de comida a ser dada ao pet.
+
+(out) Argumento de saída:
+Nenhum.
+
+Exceções:
+PetNotAliveException: Pode ser lançada se o pet não estiver vivo.
+PetOvereatException: Pode ser lançada se o pet já estiver satisfeito e não puder comer mais.
+
+Método Remoto 4 - Tomar Banho:
+
+(in) Argumentos de entrada:
+TomarBanhoInput (struct TomarBanhoInput): Estrutura de dados com o tempo em minutos para o banho.
+
+(out) Argumento de saída:
+TomarBanhoOutput (struct TomarBanhoOutput): Estrutura de dados com a quantidade de energia gasta durante o banho.
+
+Exceções:
+PetNotAliveException: Pode ser lançada se o pet não estiver vivo.
+PetLowEnergyException: Pode ser lançada se o pet não tiver energia suficiente para tomar banho.
+Método Remoto 5 - Dormir:
+
+(in) Argumentos de entrada:
+DormirInput (struct DormirInput): Estrutura de dados com o número de horas de sono.
+
+(out) Argumento de saída:
+DormirOutput (struct DormirOutput): Estrutura de dados com a quantidade de energia recuperada durante o sono.
+
+Exceções:
+PetNotAliveException: Pode ser lançada se o pet não estiver vivo.
+PetNotSleepyException: Pode ser lançada se o pet não estiver com sono.
+
+
+
+
+
