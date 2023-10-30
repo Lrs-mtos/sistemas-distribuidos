@@ -1,3 +1,5 @@
+import json
+
 # Classe Pet
 class Pet:
     # Construtor
@@ -78,6 +80,46 @@ class Pet:
         self.setEnergy(self.energyMax) # aumenta a energia para o máximo
         self.age += hours // 24 # aumenta a idade proporcionalmente às horas dormidas
 
+    # Método para serializar o estado do pet em formato JSON
+
+    def to_json(self):
+        pet_state = {
+            "alive": self.alive,
+            "clean": self.clean,
+            "cleanMax": self.cleanMax,
+            "energy": self.energy,
+            "energyMax": self.energyMax,
+            "hungry": self.hungry,
+            "hungryMax": self.hungryMax,
+            "age": self.age,
+            "diamonds": self.diamonds
+        }
+        return json.dumps(pet_state)
+
+    # Método para desserializar o estado do pet a partir de JSON
+    @classmethod
+    def from_json(cls, json_string):
+        pet_state = json.loads(json_string)
+        return cls(
+            pet_state["energyMax"],
+            pet_state["hungryMax"],
+            pet_state["cleanMax"]
+        ).update_state(pet_state)
+
+    # Método para atualizar o estado do pet a partir de um dicionário
+    def update_state(self, state):
+        self.alive = state["alive"]
+        self.clean = state["clean"]
+        self.cleanMax = state["cleanMax"]
+        self.energy = state["energy"]
+        self.energyMax = state["energyMax"]
+        self.hungry = state["hungry"]
+        self.hungryMax = state["hungryMax"]
+        self.age = state["age"]
+        self.diamonds = state["diamonds"]
+        return self
+
+    
     # Métodos get e set dos atributos
 
     def getClean(self):
@@ -188,6 +230,20 @@ while True:
         pet.toString()
     elif option == "6":
         # Sai do jogo
+        # Para salvar o estado do pet em JSON
+        with open("pet_state.json", "w") as file:
+            json.dump(pet.to_json(), file)
+        print("Estado do pet salvo em pet_state.json")
+
+        # Para carregar o estado do pet a partir de um arquivo JSON
+        try:
+            with open("pet_state.json", "r") as file:
+                pet_json = json.load(file)
+                pet = Pet.from_json(pet_json)
+            print("Estado do pet carregado de pet_state.json")
+        except FileNotFoundError:
+            print("Nenhum arquivo de estado do pet encontrado.")
+
         print("Obrigado por jogar. Até mais!")
         break
 
