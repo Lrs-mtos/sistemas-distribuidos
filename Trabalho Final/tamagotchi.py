@@ -1,6 +1,28 @@
 import json
 
-# Classe Pet
+# Class FeedAction
+class FeedAction:
+    def __init__(self, food, drink):
+        self.food = food
+        self.drink = drink
+
+# Class PlayAction
+class PlayAction:
+    def __init__(self, game, join):
+        self.game = game
+        self.join = join
+
+# Class SleepAction
+class SleepAction:
+    def __init__(self, hours, dream):
+        self.hours = hours
+        self.dream = dream
+
+# Class ShowerAction
+class ShowerAction:
+    pass # não precisa de atributos
+
+# Class Pet
 class Pet:
     # Construtor
     def __init__(self, energyMax, hungryMax, cleanMax):
@@ -32,23 +54,41 @@ class Pet:
         print("Diamantes: " + str(self.diamonds))
 
     # Método para alimentar o pet
-    def eat(self, food, drink):
+    def eat(self, action):
         if not self.testAlive():
             return
-        print("Você deu " + food + " e " + drink + " para o seu pet.")
+        parts = action.split(',')
+        if len(parts) < 2:
+            print("A ação de alimentação deve incluir comida e bebida separadas por vírgula.")
+            return
+        food, drink = parts[0], parts[1]
+        print(f"Você deu {food} e {drink} para o seu pet.")
         self.setHungry(self.hungryMax) # diminui a fome
         self.setClean(self.clean - 5) # diminui a limpeza
         self.setEnergy(self.energy - 2) # diminui a energia
 
     # Método para brincar com o pet
-    def play(self, game, join):
+    def play(self, action):
         if not self.testAlive():
             return
-        print("Você brincou de " + game + " com o seu pet.")
+        parts = action.split(',')
+        if len(parts) < 2:
+            print("A ação de brincar deve incluir o jogo e se você vai participar (s/n) separados por vírgula.")
+            return
+        game, join = parts[0], parts[1]
+        if join == "s":
+            join = True
+        elif join == "n":
+            join = False
+        else:
+            print("Resposta inválida para participar (s/n).")
+            return
+        print(f"Você brincou de {game} com o seu pet.")
         if join:
             print("Você também se divertiu muito.")
         else:
             print("Você só observou o seu pet se divertir.")
+
         self.setHungry(self.hungry - 5) # diminui a fome
         self.setClean(self.clean - 10) # diminui a limpeza
         self.setEnergy(self.energy - 15) # diminui a energia
@@ -65,20 +105,32 @@ class Pet:
         self.setEnergy(self.energy - 5) # diminui a energia
 
     # Método para fazer o pet dormir
-    def sleep(self, hours, dream):
+    def sleep(self, action):
         if not self.testAlive():
             return
-        print("Você colocou o seu pet para dormir por " + str(hours) + " horas.")
+        parts = action.split(',')
+        if len(parts) < 2:
+            print("A ação de dormir deve incluir a quantidade de horas e se o pet vai sonhar (s/n) separados por vírgula.")
+            return
+        hours, dream = parts[0], parts[1]
+        if dream == "s":
+            dream = True
+        elif dream == "n":
+            dream = False
+        else:
+            print("Resposta inválida para sonhar (s/n).")
+            return
+        print(f"Você colocou o seu pet para dormir por" + str({hours}) + "horas.")
         if dream:
             print("Ele teve sonhos muito bons e acordou bem disposto.")
-            self.diamonds += 1 # aumenta os diamantes
+            self.diamonds += 1  # aumenta os diamantes
         else:
             print("Ele dormiu tranquilamente e acordou bem descansado.")
         
-        self.setHungry(self.hungry - hours * 2) # diminui a fome proporcionalmente às horas dormidas
-        self.setClean(self.clean - hours * 3) # diminui a limpeza proporcionalmente às horas dormidas
+        self.setHungry(self.hungry - int(hours) * 2) # diminui a fome proporcionalmente às horas dormidas
+        self.setClean(self.clean - int(hours) * 3) # diminui a limpeza proporcionalmente às horas dormidas
         self.setEnergy(self.energyMax) # aumenta a energia para o máximo
-        self.age += hours // 24 # aumenta a idade proporcionalmente às horas dormidas
+        self.age += int(hours) // 24 # aumenta a idade proporcionalmente às horas dormidas
 
     # Método para serializar o estado do pet em formato JSON
 
@@ -189,42 +241,22 @@ while True:
     # Executa a opção escolhida
     if option == "1":
         # Alimenta o pet
-        print("O que você quer dar para o seu pet comer?")
-        food = input()
-        print("O que você quer dar para o seu pet beber?")
-        drink = input()
-        pet.eat(food, drink)
+        print("O que você quer dar para o seu pet? (comida,bebida)")
+        action = input()
+        pet.eat(action)
     elif option == "2":
         # Brinca com o pet
-        print("Com qual jogo você quer brincar com o seu pet?")
-        game = input()
-        print("Você vai participar do jogo? (s/n)")
-        join = input()
-        if join == "s":
-            join = True
-        elif join == "n":
-            join = False
-        else:
-            print("Resposta inválida. Digite s ou n.")
-            continue
-        pet.play(game, join)
+        print("O que você quer fazer com o seu pet? (jogo,participar)")
+        action = input()
+        pet.play(action)
     elif option == "3":
         # Dá banho no pet
         pet.shower()
     elif option == "4":
         # Faz o pet dormir
-        print("Quantas horas você quer que o seu pet durma?")
-        hours = int(input())
-        print("Você quer que o seu pet sonhe? (s/n)")
-        dream = input()
-        if dream == "s":
-            dream = True
-        elif dream == "n":
-            dream = False
-        else:
-            print("Resposta inválida. Digite s ou n.")
-            continue
-        pet.sleep(hours, dream)
+        print("O que você quer fazer com o seu pet? (horas de sono,sonhar)")
+        action = input()
+        pet.sleep(action)
     elif option == "5":
         # Mostra os atributos do pet
         pet.toString()
