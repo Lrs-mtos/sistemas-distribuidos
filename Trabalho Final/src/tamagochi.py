@@ -1,5 +1,35 @@
 import json
 
+
+class Message:
+    def __init__(self, type, id, obj_reference, method_id, *arguments):
+        self.type = type
+        self.id = id
+        self.obj_reference = obj_reference
+        self.method_id = method_id
+        self.arguments = [json.dumps(arg) for arg in arguments]
+
+    def to_json(self):
+        message_dict = {
+            "type": self.type,
+            "id": self.id,
+            "obj_reference": self.obj_reference,
+            "method_id": self.method_id,
+            "arguments": self.arguments
+        }
+        return json.dumps(message_dict)
+
+    @classmethod
+    def from_json(cls, json_string):
+        message_dict = json.loads(json_string)
+        return cls(
+            message_dict["type"],
+            message_dict["id"],
+            message_dict["obj_reference"],
+            message_dict["method_id"],
+            *[json.loads(arg) for arg in message_dict["arguments"]]
+        )
+
 # Class FeedAction
 class FeedAction:
     def __init__(self, food, drink):
@@ -132,7 +162,7 @@ class Pet:
         self.setEnergy(self.energyMax) # aumenta a energia para o máximo
         self.age += int(hours) // 24 # aumenta a idade proporcionalmente às horas dormidas
 
-    # Método para serializar o estado do pet em formato JSON
+    """ # Método para serializar o estado do pet em formato JSON
 
     def to_json(self):
         pet_state = {
@@ -156,7 +186,7 @@ class Pet:
             pet_state["energyMax"],
             pet_state["hungryMax"],
             pet_state["cleanMax"]
-        ).update_state(pet_state)
+        ).update_state(pet_state) """
 
     # Método para atualizar o estado do pet a partir de um dicionário
     def update_state(self, state):
@@ -263,7 +293,7 @@ while True:
     elif option == "6":
         # Sai do jogo
         # Para salvar o estado do pet em JSON
-        with open("pet_state.json", "w") as file:
+        """ with open("pet_state.json", "w") as file:
             json.dump(pet.to_json(), file)
         print("Estado do pet salvo em pet_state.json")
 
@@ -274,7 +304,26 @@ while True:
                 pet = Pet.from_json(pet_json)
             print("Estado do pet carregado de pet_state.json")
         except FileNotFoundError:
-            print("Nenhum arquivo de estado do pet encontrado.")
+            print("Nenhum arquivo de estado do pet encontrado.") """
+
+
+
+        # Criar um objeto Message
+        msg = Message("request", 1, "pet", "eat", "banana", "juice")
+
+        # Converter o objeto Message em JSON
+        msg_json = msg.to_json()
+        print("Mensagem JSON:", msg_json)
+
+        # Desserializar a mensagem JSON de volta para um objeto Message
+        received_msg = Message.from_json(msg_json)
+        print("Tipo:", received_msg.type)
+        print("ID:", received_msg.id)
+        print("Referência do Objeto:", received_msg.obj_reference)
+        print("ID do Método:", received_msg.method_id)
+        print("Argumentos:", received_msg.arguments)
+
+
 
         print("Obrigado por jogar. Até mais!")
         break
