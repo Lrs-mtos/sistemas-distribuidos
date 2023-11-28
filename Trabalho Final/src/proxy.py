@@ -3,17 +3,21 @@
 import json
 import socket
 
+
 class Proxy:
     def __init__(self, server_address):
         self.server_address = server_address
         self.sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
         # Definir o tempo limite em segundos
         self.sock.settimeout(5.0)
+        # Criar um contador para gerar ids de requisição
+        self.request_id = 0
 
     def invoke_method(self, method_name, *args):
+        self.request_id += 1
         message = {
             "type": "request",
-            "id": 1,
+            "id": self.request_id,
             "obj_reference": "servant", 
             "method_id": method_name,
             "arguments": [json.dumps(arg) for arg in args]
