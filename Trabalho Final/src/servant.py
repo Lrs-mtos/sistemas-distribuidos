@@ -21,6 +21,11 @@ class Pet:
         print(f"You played {game} with your pet. Participation: {join}.")
         # todo -> lógica para atualizar os atributos do pet
         return {"status": "success"}
+    
+    def sleep(self, hours, dream):
+        print(f"Your pet sleeped {hours} at night. Dream? {dream}.")
+        # todo -> lógica para atualizar os atributos do pet
+        return {"status": "success"}
 
 class Servant:
     def __init__(self):
@@ -31,3 +36,6 @@ class Servant:
 
     def play(self, game, join):
         return self.pet.play(game, join)
+    
+    def sleep(self, hours, dream):
+        return self.pet.sleep(hours, dream)

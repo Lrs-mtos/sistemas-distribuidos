@@ -9,3 +9,6 @@ if __name__ == '__main__':
 
     result_play = proxy.invoke_method("play", "fetch", "s")
     print("Result of play method:", result_play)
+
+    result_sleep = proxy.invoke_method("sleep", "8", "s")
+    print("Result of sleep method:", result_sleep)

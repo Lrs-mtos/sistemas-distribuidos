@@ -14,3 +14,6 @@ class Skeleton:
 
     def play(self, game, join):
         return self.serve_method("play", game, join)
+
+    def sleep(self, hours, dream):
+        return self.serve_method("sleep", hours, dream)
