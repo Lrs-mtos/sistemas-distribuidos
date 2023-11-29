@@ -15,17 +15,17 @@ class Pet:
     def eat(self, food, drink):
         print(f"You fed your pet with {food} and {drink}.")
         # todo -> lógica para atualizar os atributos do pet
-        return {"status": "success"}
+        return {food: "success"}
 
     def play(self, game, join):
         print(f"You played {game} with your pet. Participation: {join}.")
         # todo -> lógica para atualizar os atributos do pet
-        return {"status": "success"}
+        return {game: "success"}
     
     def sleep(self, hours, dream):
         print(f"Your pet sleeped {hours} at night. Dream? {dream}.")
         # todo -> lógica para atualizar os atributos do pet
-        return {"status": "success"}
+        return {hours: "success"}
 
 class Servant:
     def __init__(self):
