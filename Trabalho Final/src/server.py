@@ -18,18 +18,27 @@ class UDPServer:
         skeleton = Skeleton(servant)
         dispatcher = Dispatcher(skeleton)
 
-        while True:
+        
+        count = 0
+        while True:  
 
+
+            print("Waiting for the request")
             data, client_address = self.sock.recvfrom(4096)
             payload = json.loads(data.decode('utf-8'))
             request_id = payload['id']
             print(request_id)
 
+            if count < 2:
+                count += 1
+                print("Losing request {count}...".format(count=count))
+                continue
+
+            count = 0
             if client_address in self.history:
                 if request_id in self.history[client_address]:
                     result = self.history[client_address][request_id]
-                else: # Adicionar esse else
-                    # Despachar a requisição para o dispatcher
+                else:
                     result = dispatcher.dispatch_request(json.dumps(payload))
                     # Armazenar a resposta no histórico
                     self.history[client_address][request_id] = result
